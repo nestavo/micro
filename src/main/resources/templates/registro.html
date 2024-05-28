@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Registro de Clientes</title>
+</head>
+<body>
+    <h2>Registro de Nuevo Cliente</h2>
+    <form id="registroForm">
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre"><br>
+
+        <label for="apellido">Apellido:</label><br>
+        <input type="text" id="apellido" name="apellido"><br>
+
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email"><br>
+
+        <label for="telefono">Teléfono:</label><br>
+        <input type="tel" id="telefono" name="telefono"><br>
+
+        <input type="submit" value="Registrar">
+    </form>
+
+    <script>
+        document.getElementById('registroForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonData)
+            };
+            fetch('http://localhost:9090/usuarios/crearUsuario', requestOptions)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al enviar los datos');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Datos enviados correctamente:', data);
+                    // Aquí puedes realizar cualquier acción adicional después de enviar los datos
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+</body>
+</html>
